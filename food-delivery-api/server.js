@@ -73,6 +73,25 @@ app.post('/register',(req,res) => {
 	.catch(err => res.status(400).json("unable to register"));
 })
 
+app.post('/ordered', (req,res) => {
+	const { email, item_name, price, qty } = req.body;
+	const total = price*qty;
+	db.insert({
+		email: email,
+		item_name: item_name,
+		price: price,
+		qty: qty,
+		total: total,
+		ordered: new Date()
+	})
+	.into('orders')
+	.returning('*')
+	.then(order => {
+		res.json(order[0]);
+	})
+	.catch(err => res.status(400).json("unable to order"));
+})
+
 app.get('/menu',(req,res) => {
 	return db.select('*').from('menu')
 		.then(item => res.json(item))
