@@ -97,7 +97,7 @@ class App extends Component {
 		    	</div>:
 		    	(this.state.route === 'orders')? 
 		    	<div className='basket'>
-		    	<Cart cart={this.state.cart} onOrder={this.onOrder} /> 
+		    	<Cart cart={this.state.cart} onOrder={this.onOrder} email={this.state.user.email}/> 
 		    	</div>:
 		    	<div className="pa5">
 		    	<SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />

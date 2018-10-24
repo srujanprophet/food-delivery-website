@@ -34,6 +34,25 @@ class Cart extends React.Component {
 	  return 0;
 	}
 
+	ordered(sum) {
+		// console.log(this.props.email,sum)
+		// console.log(this.state.orderList);
+		this.state.orderList.forEach(item => {
+			console.log(item.price,item.qty,item.name);
+			fetch('http://localhost:3000/ordered', {
+				method: 'post', 
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify({
+					email: this.state.signInEmail,
+					item_name: item.name,
+					price: item.price,
+					qty: item.qty,
+				})
+			})
+				.then(response => response.json())
+		})
+	}
+
 	render() {
 		const { orderList } = this.state;
 		const sum = orderList.reduce(function (a,b) { return a + (b.price*b.qty); }, 0);
@@ -70,8 +89,9 @@ class Cart extends React.Component {
 				type="submit"
 				value="Place Order"
 				className="f6 link dim ba bw2 ph3 pv2 mb2 dib dark-blue"
-				onClick={() => {
+				onClick={(params) => {
 					alert("Order Placed")
+					this.ordered(sum);
 					this.setState({'orderList': []})
 					this.props.onOrder();
 				}
